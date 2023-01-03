@@ -4,6 +4,12 @@ from six.moves import map
 import inspect
 
 
+if not hasattr(inspect, 'getargspec'):
+    getargspec = inspect.getfullargspec
+else:
+    getargspec = inspect.getargspec
+
+
 class QueryInfo(object):
     """A QueryInfo object holds information about which query was executed
     in order to have better exception messages when content cannot be found.
@@ -21,7 +27,7 @@ class QueryInfo(object):
 
     @classmethod
     def build(klass, function):
-        argspec = inspect.getargspec(function)
+        argspec = getargspec(function)
         if 'query_info' not in argspec.args and not argspec.keywords:
             raise NameError(
                 'QueryInfo.build wrapped functions must accept a'
@@ -74,7 +80,7 @@ class QueryInfo(object):
         :returns: The method call.
         :rtype: string
         """
-        argument_names = inspect.getargspec(self.function).args
+        argument_names = getargspec(self.function).args
         positional_arguments = list(self.args)
         if argument_names[0] == 'self':
             # we have an instance method
