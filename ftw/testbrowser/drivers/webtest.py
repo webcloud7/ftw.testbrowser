@@ -27,7 +27,7 @@ class WebtestDriver(object):
 
     def __init__(self, browser):
         self.browser = browser
-        self.app = TestApp(wsgi_app)
+        self.app = TestApp(wsgi_app, lint=False)
         self.max_redirects = 5
         self.reset()
 
